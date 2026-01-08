@@ -1,0 +1,2 @@
+- create project in the same region as ur n8n hosting
+- remember project password - very important as this is ur db password
