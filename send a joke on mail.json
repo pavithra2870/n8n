@@ -1,0 +1,147 @@
+{
+  "name": "send a joke on mail",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://official-joke-api.appspot.com/random_joke",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -224,
+        -96
+      ],
+      "id": "a07f1e46-8243-48fe-8323-5683262262d4",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        -96
+      ],
+      "id": "8d442de0-4a9f-480a-af8c-346c1fca9888",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "sendTo": "pavithra922710@gmail.com",
+        "subject": "={{ $json.headline }}",
+        "emailType": "text",
+        "message": "={{ $json.setup }} \n\n\n{{ $json.email_body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        288,
+        -96
+      ],
+      "id": "f50c595a-beaa-44af-822d-cef4d3508307",
+      "name": "Send a message",
+      "webhookId": "50abcdb3-adac-4892-84d7-db8ea618124d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qLxj1IgWWhGQq4W2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3f1ec00e-b10f-4ffb-9972-328b245090f6",
+              "name": "headline",
+              "value": "Here is your daily joke:",
+              "type": "string"
+            },
+            {
+              "id": "2e76448c-8845-4dc4-9ff0-56567c4c1866",
+              "name": "=setup",
+              "value": "={{ $json.setup }}",
+              "type": "string"
+            },
+            {
+              "id": "f8b03d7b-700e-4ef5-9f09-2ee2e1bb21ad",
+              "name": "email_body",
+              "value": "WAIT FOR IT",
+              "type": "string"
+            },
+            {
+              "id": "39ae81eb-f3bd-4414-a1db-c31c1698e310",
+              "name": "email_body",
+              "value": "={{ $json.punchline }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        32,
+        -96
+      ],
+      "id": "0a710a65-cea7-4f5a-a83f-f39eabbee859",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "82f1c5ee-b379-4d57-81cb-233ab3629d6b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6f75fa5f3b00b7d8db90a81fe564597a7c36ebebbe1285c63a9987e7c9b6cd2d"
+  },
+  "id": "F85bg0uXt5tYBIsx",
+  "tags": []
+}
