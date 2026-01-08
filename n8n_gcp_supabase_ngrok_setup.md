@@ -271,3 +271,5 @@ docker logs n8n
 -   ngrok forwards to local 5678.
 -   Encryption key must never change.
 -   All data lives in Supabase, not Docker.
+-   Use supabase us region so that ur vm instance and supabase project are in same region (lesser latency)
+-   NEVER LOSE YOUR N8N_ENCRYPTION_KEY - It is the key to your supabase database - you lose it, you lose all your credentials, workflows
