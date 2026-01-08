@@ -189,7 +189,13 @@ Start n8n:
 ``` bash
 docker compose up -d
 ```
+------------------------------------------------------------------------
+## To get your free domain from ngrok
 
+- signup: https://ngrok.com/
+- use developer role
+- when you have onboarded you get your free domain on Domains in the sidebar
+- click on authToken in the sidebar to get your authToken 
 ------------------------------------------------------------------------
 
 ## ngrok Setup
@@ -216,36 +222,109 @@ ngrok http 5678
 ```
 
 ------------------------------------------------------------------------
-
 ## Run ngrok in background
 
-Create service:
+## 1. Install `screen`
 
-``` bash
-sudo nano /etc/systemd/system/ngrok.service
+```bash
+sudo apt update
+sudo apt install screen -y
 ```
 
-``` ini
-[Unit]
-Description=ngrok tunnel for n8n
-After=network.target docker.service
+---
 
-[Service]
-User=YOUR_USERNAME
-ExecStart=/usr/bin/ngrok http 5678
-Restart=always
+## 2. Start a named screen session for ngrok
 
-[Install]
-WantedBy=multi-user.target
+```bash
+screen -S ngrok
 ```
 
-Enable:
+You are now inside a persistent terminal.
 
-``` bash
-sudo systemctl daemon-reload
-sudo systemctl enable ngrok
-sudo systemctl start ngrok
+---
+
+## 3. Run ngrok inside the screen session
+
+```bash
+ngrok http 5678
 ```
+
+You will see ngrok start and print the public forwarding URL.
+
+---
+
+## 4. Detach the screen (keep it running in background)
+
+Press:
+
+```
+Ctrl + A  then  D
+```
+
+ngrok is now running safely in background.
+
+---
+
+## 5. Re-attach later anytime
+
+```bash
+screen -r ngrok
+```
+
+---
+
+## 6. Check active screen sessions
+
+```bash
+screen -ls
+```
+
+---
+
+## 7. Stop ngrok completely
+
+```bash
+screen -r ngrok
+```
+
+Then inside it:
+
+```bash
+Ctrl + C
+exit
+```
+
+---
+
+## 8. Auto-start ngrok on reboot (screen + crontab)
+
+Edit root crontab:
+
+```bash
+sudo crontab -e
+```
+
+Add at bottom:
+
+```bash
+@reboot screen -dmS ngrok ngrok http 5678
+```
+
+Reboot once to test:
+
+```bash
+sudo reboot
+```
+
+After reboot:
+
+```bash
+screen -ls
+```
+
+You should see `ngrok` running.
+
+---
 
 ------------------------------------------------------------------------
 
