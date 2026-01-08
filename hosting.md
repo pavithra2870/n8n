@@ -1,0 +1,23 @@
+# GCP + Supabase + Ngrok
+- first thought - create one vm instance for free, run the container connected to supabase, everything is sorted. cool.
+- but no, it was hard to ensure your settings match exactly in creating vm instance so you dont get bill heart attack later
+- created vm instance carefully, created firewall rule, created swap file of 2gb
+- in supabase created project, got its connection strings and stuff
+- created .yml file with all creds: n8n encryption key (to decrypt cred stored in supabase), supabase urls
+- was successful in 2nd attempt - but then vm instance is not https its http. so cookies issue came up
+- u either disable cookies to run it temporarily or buy a domain
+- disabling cookies means u cant use external push nodes because all nodes require secure https request only
+- u have to get a domain so it can be the proxy for the http ip inside ur vm
+- ngrok has 1 free domain that comes generated - setup ngrok in vm instance ssh, use screen to keep it running in background
+- change webhook url and n8n host values in .yaml and re run it
+- first i kept port as 443 (as it is https port) instead of 5678 (n8n port)
+- this wont work
+- so changed back n8n port to 5678
+- everything worked perfectly - then found 1 important detail
+- that is latency wud be more. ur workflow hits ngrok domain then goes to supabase db which is in india, fetches and goes back to ngrok domain which is in us and then to ur vm instance which is also in us
+- latency is high
+- e2.micro with 1gb ram and 2gb swap file is not really good for complex workflows
+- n8n is extremely chatty, so it speaks with supabase very often -> high latency (us - india - us)
+- ngrok is a free domain -> if too many requests, performance decrease
+- overall i faced extreme lag, i got frustrated. cloud hosting is the best
+- now: openhosst (fully managed with subdomain) + supabase (both in us -> more performance and fast)
